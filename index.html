@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discord Templates</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #2c2f33;
+      color: #ffffff;
+    }
+    header {
+      text-align: center;
+      padding: 20px;
+      background-color: #23272a;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+    header h1 {
+      margin: 0;
+      color: #7289da;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #23272a;
+      border-radius: 8px;
+    }
+    .template {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #2c2f33;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+    .template h3 {
+      margin: 0;
+    }
+    .template button {
+      padding: 10px;
+      background: #7289da;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .template button:hover {
+      background: #5b6eae;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    form input, form textarea, form button {
+      margin: 10px 0;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+    }
+    form textarea {
+      resize: vertical;
+    }
+    form button {
+      background-color: #7289da;
+      color: white;
+      cursor: pointer;
+    }
+    form button:hover {
+      background-color: #5b6eae;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Discord Templates</h1>
+  </header>
+
+  <div class="container" id="templateList">
+    <h2>Available Templates</h2>
+    <!-- Templates will be dynamically inserted here -->
+  </div>
+
+  <div class="container">
+    <h2>Upload a Template</h2>
+    <form id="uploadForm">
+      <input type="text" id="templateName" placeholder="Template Name" required>
+      <textarea id="templateDescription" placeholder="Template Description" rows="4" required></textarea>
+      <input type="url" id="templateLink" placeholder="Discord Template Link (https://discord.new/...)" required>
+      <button type="submit">Upload Template</button>
+    </form>
+    <p id="uploadMessage"></p>
+  </div>
+
+  <script>
+    const templateList = document.getElementById("templateList");
+    const uploadForm = document.getElementById("uploadForm");
+
+    const templates = []; // Array to store templates
+
+    // Function to render templates
+    function renderTemplates() {
+      templateList.innerHTML = '<h2>Available Templates</h2>';
+      templates.forEach((template, index) => {
+        const templateDiv = document.createElement("div");
+        templateDiv.className = "template";
+        templateDiv.innerHTML = `
+          <div>
+            <h3>${template.name}</h3>
+            <p>${template.description}</p>
+          </div>
+          <button onclick="useTemplate(${index})">Use Template</button>
+        `;
+        templateList.appendChild(templateDiv);
+      });
+    }
+
+    // Use Template Function
+    function useTemplate(index) {
+      const template = templates[index];
+      window.open(template.link, "_blank");
+    }
+
+    // Handle Upload Form Submission
+    uploadForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById("templateName").value;
+      const description = document.getElementById("templateDescription").value;
+      const link = document.getElementById("templateLink").value;
+
+      // Validate template link
+      if (!link.startsWith("https://discord.new/")) {
+        document.getElementById("uploadMessage").innerText = "Invalid template link.";
+        return;
+      }
+
+      // Add new template
+      templates.push({ name, description, link });
+      renderTemplates();
+
+      // Reset form and message
+      uploadForm.reset();
+      document.getElementById("uploadMessage").innerText = "Template uploaded successfully!";
+    });
+
+    // Initial render
+    renderTemplates();
+  </script>
+</body>
+</html>
