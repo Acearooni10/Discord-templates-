@@ -22,6 +22,19 @@
       margin: 0;
       color: #7289da;
     }
+    .invite-button {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #7289da;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    .invite-button:hover {
+      background-color: #5b6eae;
+    }
     .container {
       max-width: 800px;
       margin: 20px auto;
@@ -79,6 +92,9 @@
 <body>
   <header>
     <h1>Discord Templates</h1>
+    <a class="invite-button" href="https://discord.com/oauth2/authorize?client_id=YOUR_BOT_CLIENT_ID&permissions=8&scope=bot">
+      Invite the Bot
+    </a>
   </header>
 
   <div class="container" id="templateList">
@@ -101,7 +117,8 @@
     const templateList = document.getElementById("templateList");
     const uploadForm = document.getElementById("uploadForm");
 
-    const templates = []; // Array to store templates
+    // Load templates from localStorage
+    let templates = JSON.parse(localStorage.getItem("templates")) || [];
 
     // Function to render templates
     function renderTemplates() {
@@ -126,6 +143,11 @@
       window.open(template.link, "_blank");
     }
 
+    // Save templates to localStorage
+    function saveTemplates() {
+      localStorage.setItem("templates", JSON.stringify(templates));
+    }
+
     // Handle Upload Form Submission
     uploadForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -142,6 +164,7 @@
 
       // Add new template
       templates.push({ name, description, link });
+      saveTemplates(); // Save to localStorage
       renderTemplates();
 
       // Reset form and message
